@@ -50,6 +50,13 @@ let phonebook = [
     const id = Math.floor(Math.random() * 1000)
     return id
   }
+
+  const personExists = (name) => {
+    const duplicate = phonebook.find(contact => contact.name === name)
+    if (duplicate) {
+        return true
+    } else return false
+}
   
   app.post('/api/persons', (request, response) => {
     const body = request.body
@@ -61,7 +68,11 @@ let phonebook = [
     } else if (!body.number) {
     return response.status(400).json({ 
         error: 'number missing' 
-        })
+      })
+    } else if (personExists(body.name)) {
+        return response.status(400).json({ 
+        error: 'name must be unique' 
+      })
     }
   
     const contact = {
