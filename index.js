@@ -32,11 +32,11 @@ let phonebook = [
     <p>${date}</p>`)
   })
 
-  app.get('/api/phonebook', (request, response) => {
+  app.get('/api/persons', (request, response) => {
     response.json(phonebook)
   })
 
-  app.get('/api/phonebook/:id', (request, response) => {
+  app.get('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)
     const contact = phonebook.find(contact => contact.id === id)
     if (contact) {
@@ -53,7 +53,7 @@ let phonebook = [
     return maxId + 1
   }
   
-  app.post('/api/phonebook', (request, response) => {
+  app.post('/api/persons', (request, response) => {
     const body = request.body
   
     if (!body.name) {
@@ -77,7 +77,7 @@ let phonebook = [
     response.json(contact)
   })
 
-  app.delete('/api/phonebook/:id', (request, response) => {
+  app.delete('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)
     phonebook = phonebook.filter(contact => contact.id !== id)
 
