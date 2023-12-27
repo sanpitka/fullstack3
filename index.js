@@ -47,10 +47,8 @@ let phonebook = [
   })
 
   const generateId = () => {
-    const maxId = phonebook.length > 0
-      ? Math.max(...phonebook.map(contact => contact.id))
-      : 0
-    return maxId + 1
+    const id = Math.floor(Math.random() * 1000)
+    return id
   }
   
   app.post('/api/persons', (request, response) => {
@@ -67,9 +65,9 @@ let phonebook = [
     }
   
     const contact = {
-      name: body.name,
-      number: body.number,
       id: generateId(),
+      name: body.name,
+      number: body.number
     }
   
     phonebook = phonebook.concat(contact)
