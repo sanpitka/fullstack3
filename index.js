@@ -3,7 +3,7 @@ const morgan = require('morgan')
 const app = express()
 
 app.use(express.json())
-app.use(morgan('tiny'))
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 let phonebook = [
     {
@@ -86,6 +86,7 @@ let phonebook = [
     phonebook = phonebook.concat(contact)
   
     response.json(contact)
+    morgan.token('body', request => JSON.stringify(request.body))
   })
 
   app.delete('/api/persons/:id', (request, response) => {
