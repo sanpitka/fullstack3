@@ -4,9 +4,11 @@ const cors = require('cors')
 const app = express()
 
 app.use(express.json())
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 app.use(cors())
 app.use(express.static('dist'))
+
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
+morgan.token('body', request => JSON.stringify(request.body))
 
 let phonebook = [
     {
@@ -89,7 +91,6 @@ let phonebook = [
     phonebook = phonebook.concat(contact)
   
     response.json(contact)
-    morgan.token('body', request => JSON.stringify(request.body))
   })
 
   app.delete('/api/persons/:id', (request, response) => {
@@ -98,6 +99,8 @@ let phonebook = [
 
     response.status(204).end()
   })  
+
+
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
