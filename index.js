@@ -17,9 +17,11 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :c
 
 app.get('/info', (request, response) => {
     const date = new Date()
-    response.send(`<p>Phonebook has info for ${persons.length} people</p>
-    <p>${date}</p>`)
+    Person.find({}).then(persons => {
+        response.send(`<p>Phonebook has info for ${persons.length} people</p>
+        <p>${date}</p>`)
     })
+})
 
 app.get('/api/persons', (request, response) => {
     Person.find({}).then(persons => {
@@ -40,19 +42,15 @@ app.get('/api/persons/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
-const generateId = () => {
-    const maxId = persons.length > 0
-        ? Math.max(...persons.map(n => n.id))
-        : 0
-    return maxId + 1
+const personExists = (name) => {
+    Person.find({}).then(persons => {
+        const duplicate = persons.find(person => person.name === name)
+        if (duplicate) {
+            return true
+        } else return false
+    })
 }
 
-const personExists = (name) => {
-    const duplicate = persons.find(person => person.name === name)
-    if (duplicate) {
-        return true
-    } else return false
-}
 
 app.post('/api/persons', (request, response) => {
     const body = request.body
@@ -74,7 +72,6 @@ app.post('/api/persons', (request, response) => {
     }
 
     const person = new Person({
-        id: generateId(),
         name: body.name,
         number: body.number,
     })
@@ -85,8 +82,8 @@ app.post('/api/persons', (request, response) => {
 })
 
 app.delete('/api/persons/:id', (request, response, next) => {
-    Person.findByIdAndRemove(request.params.id)
-        .then(result => {
+    Person.findByIdAndDelete(request.params.id)
+        .then(() => {
             response.status(204).end()
         })
         .catch(error => next(error))
