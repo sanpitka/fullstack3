@@ -71,22 +71,52 @@ app.post('/api/persons', (request, response, next) => {
             error: 'number missing'
         })
     }
-    if (personExists(body.name)) {
-        return response.status(400).json({ 
-        error: 'name must be unique' 
-      })
-    }
+    if (!personExists(body.name)) {
+        const person = new Person({
+            name: body.name,
+            number: body.number,
+        })
 
-    const person = new Person({
+        person.save()
+            .then(savedPerson => {
+                response.json(savedPerson)
+            })
+            .catch(error => next(error))
+    } else {
+        console.log("Täällä")
+    }
+    /*if (window.confirm(`${newName} is already added to phonebook.
+    Replace the old numer with the new one?`)){
+        console.log("MITÄ SAATANAAAAA????")
+        app.put('/api/persons/:id', (request, response, next) => {
+            const body = request.body
+            const person = {
+                name: body.name,
+                number: body.number,
+            }
+            
+            Person.findByIdAndUpdate(request.params.id, person, {new: true})
+            .then(updatedPerson => {
+                response.json(updatedPerson)
+            })
+            .catch(error => next(error))
+        })
+    }*/    
+})
+
+app.put('/api/persons/:id', (request, response, next) => {
+    console.log("Heja Sverige!")
+    const body = request.body
+    const person = {
         name: body.name,
         number: body.number,
+    }
+    
+    Person.findByIdAndUpdate(request.params.id, person, {new: true})
+    .then(updatedPerson => {
+        response.json(updatedPerson)
     })
-
-    person.save()
-        .then(savedPerson => {
-            response.json(savedPerson)
-        })
-        .catch(error => next(error))
+    .catch(error => next(error))
 })
 
 app.delete('/api/persons/:id', (request, response, next) => {
