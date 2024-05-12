@@ -2,19 +2,32 @@ import globals from "globals";
 import pluginJs from "@eslint/js";
 
 export default [
-  { files: ["**/*.js"], languageOptions: { sourceType: "commonjs", } },
-  { languageOptions: { globals: globals.browser } },
+  {
+    files: ["**/*.js"],
+    languageOptions: {
+      sourceType: "commonjs",
+      globals: { ...globals.node },
+      parserOptions: {
+        ecmaVersion: 2020,
+      },
+    },
+  },
+  {
+    languageOptions: {
+      globals: globals.browser,
+    },
+  },
+  {
+    ignores: ["dist"]
+  },
   pluginJs.configs.recommended,
   {
-    "env": {
-      "node": true
-    },
-    "rules": {
+    rules: {
       'eqeqeq': 'error',
       'no-trailing-spaces': 'error',
       'object-curly-spacing': ['error', 'always'],
       'arrow-spacing': ['error', { 'before': true, 'after': true }],
       'no-console': 0,
-    }
-  }
+    },
+  },
 ];

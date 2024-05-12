@@ -26,7 +26,7 @@ app.get('/info', (request, response, next) => {
             .catch(error => next(error))
 })
 
-  app.get('/api/persons', (request, response) => {
+  app.get('/api/persons', (request, response, next) => {
     Person.find({})
         .then(persons => {
         response.json(persons)
@@ -34,7 +34,7 @@ app.get('/info', (request, response, next) => {
         .catch(error => next(error))
   })
 
-  app.get('/api/persons/:id', (request, response) => {
+  app.get('/api/persons/:id', (request, response, next) => {
     Person.findById(request.params.id)
         .then(person => {
             if (person) {
@@ -46,7 +46,7 @@ app.get('/info', (request, response, next) => {
         .catch(error => next(error))
   })
 
-  const personExists = (name) => {
+const personExists = (name, next) => {
     Person.find({})
         .then(persons => {
             const duplicate = persons.find(person => person.name === name)
