@@ -1,6 +1,8 @@
+require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
+const Person = require('./models/person')
 const app = express()
 
 app.use(express.json())
@@ -35,10 +37,6 @@ let persons = [
         number: "39-23-6423122"
       }
   ]
-
-  app.get('/', (request, response) => {
-    response.send('<h1>Hello World!</h1>')
-  })
 
   app.get('/info', (request, response) => {
     const date = new Date()
@@ -96,15 +94,15 @@ let persons = [
         })
     }
 
-    const person = {
+    const person = new Person({
         id: generateId(),
         name: body.name,
-        number: body.number,
-    }
+        number: body.number
+    })
 
-    persons = persons.concat(person)
-    
-    response.json(person)
+    person.save().then(savedPerson => {
+        response.json(savedPerson)
+    })
   })
 
   app.delete('/api/persons/:id', (request, response) => {
