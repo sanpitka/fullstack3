@@ -7,7 +7,6 @@ export default [
   pluginJs.configs.recommended,
   {
     "env": {
-      "browser": true,
       "node": true
     },
     "rules": {
