@@ -16,7 +16,6 @@ morgan.token('content-body', request => {
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :content-body'))
 
 
-
   app.get('/info', (request, response) => {
     const date = new Date()
     Person.find({})
