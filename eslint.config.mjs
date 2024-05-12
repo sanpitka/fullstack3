@@ -7,14 +7,6 @@ export default [
     languageOptions: {
       sourceType: "commonjs",
       globals: { ...globals.node },
-      parserOptions: {
-        ecmaVersion: 2020,
-      },
-    },
-  },
-  {
-    languageOptions: {
-      globals: globals.browser,
     },
   },
   {
